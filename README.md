@@ -126,21 +126,6 @@ Theater ──── Screening (weak) ──── Movie ──── MovieLangu
 
 ---
 
-## Concurrency & Race Conditions
-
-The ticket booking route uses `SELECT ... FOR UPDATE` to lock the screening row before checking seat availability. This prevents two users from simultaneously booking the last available seats and both succeeding — a real problem any ticketing system needs to handle.
-
-```python
-# Lock the row — no other transaction can read/write until this one commits
-cur.execute("""
-    SELECT title FROM Screening
-    WHERE title = %s AND theater_id = %s AND screen_id = %s
-    FOR UPDATE;
-""", (title, theater_id, screen_id))
-```
-
----
-
 ## Project Structure
 
 ```
@@ -217,9 +202,3 @@ The seed data is designed to tell a story immediately on first load:
 - **Saja** has rewards at 8/10 — two more tickets from a free one
 - **62 screenings** spread from June 2026 through December 2027 — the schedule always looks full
 - **$6,632 revenue** across 461 tickets — analytics dashboard looks real on day one
-
----
-
-## Built For
-
-CS480 — Database Systems · University of Illinois Chicago
